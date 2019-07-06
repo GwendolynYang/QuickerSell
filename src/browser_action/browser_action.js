@@ -1,90 +1,93 @@
 function load() {
 
-  var pred_list = document.getElementById("prediction");
+  var pred_list = document.getElementById("results");
 
-  chrome.storage.local.get("prediction", function(data) {
+  chrome.storage.local.get(["prediction"], function(data) {
+
     var list = document.createElement('ul');
 
-// static string of house address: "Address: "
-    var tx_ad = document.createElement('li');
-    tx_ad.appendChild(document.createTextNode("Address: "));
-    list.appendChild(tx_ad);
+    var prediction = data.prediction;
+    console.log(typeof(data.prediction));
+    console.log(data.prediction);
+
+//// static string of house address: "Address: "
+//    var tx_ad = document.createElement('li');
+//    tx_ad.innerHTML = "Address: ";
+//    //tx_ad.appendChild(document.createTextNode());
+//    list.appendChild(tx_ad);
 
 // display Address of this house
-    var addr = document.createElement('a');
-    addr.appendChild(document.createTextNode(prediction.address));
+    var addr = document.createElement('h3');
+    addr.textContent = prediction.address;
+    list.appendChild(addr);
 
-// display city, state, zip code in second line
-    var city = document.createElement('a');
-    city.appendChild(document.createTextNode(prediction.city));
-    list.appendChild(city);
-
-/*
-    // Don't show price. It is obvious to see from the web page itself.
-    // Hard question, "current price" or "original listed price"?
-    // Current model only deal with original price.
-// static string of (current/listing) house price: "Price:"
+/******* Listing price *******/
+// static string of days on market: "Days on Market: "
     var tx_p = document.createElement('li');
-    tx_p.appendChild(document.createTextNode("Price: "));
+    tx_p.innerHTML = "Listing price: ";
     list.appendChild(tx_p);
 
-// display the price: $1,023,000
-    var price = document.createElement('a');
-    price.appendChild(document.createTextNode(prediction.curr_price));
-    list.appendChild(price);*/
+// display the days(or weeks):
+    var lp = document.createElement('a1');
+    lp.textContent = prediction.listing_price ;
+    tx_p.appendChild(lp);
+    //list.appendChild(dom);
 
+/******* Days on market *******/
 // static string of days on market: "Days on Market: "
     var tx_d = document.createElement('li');
-    tx_d.appendChild(document.createTextNode("Days on market: "));
+    tx_d.innerHTML = "Days on market: ";
     list.appendChild(tx_d);
 
 // display the days(or weeks):
-    var dom = document.createElement('a');
-    dom.appendChild(document.createTextNode(prediction.dom));
-    list.appendChild(dom);
+    var dom = document.createElement('a1');
+    dom.textContent = prediction.dom ;
+    tx_d.appendChild(dom);
+    //list.appendChild(dom);
 
-// TODO: should be in a separate bounding box apart from above info.
+/******* Predict time *******/
 // static string of prediction:
     var tx_1 = document.createElement('li');
-    tx_1.appendChild(document.createTextNode("This home has 75% probability sold in:   "));
+    tx_1.innerHTML = "This home has 75% probability sold in:"
+    //tx_1.innerHTML = "This home has 75% probability sold in: "  +  prediction.pred_weeks ;
     list.appendChild(tx_1);
 
 // display the prediction of days
-    var days75 = document.createElement('span');
-    days75.appendChild(document.createTextNode(prediction.days));
-    list.appendChild(days75);
+    var wk75 = document.createElement('a1');
+    wk75.textContent = prediction.pred_weeks ;
+    tx_1.appendChild(wk75);
 
-//// static string of prediction: TODO
+/******* Predict price *******/
+//// static string of prediction:
     var tx_2 = document.createElement('li');
-    tx_2.appendChild(document.createTextNode("This home has 75% probability sold at "));
+    tx_2.appendChild(document.createTextNode("This home has 75% probability sold at:"));
     list.appendChild(tx_2);
 
 // display the prediction of price drop
+    var off = document.createElement('a');
     var off_1 = document.createElement('span');
-    off_1.appendChild(document.createTextNode(prediction.off_usd));
-    list.appendChild(off_1);
+    off_1.textContent = prediction.off_usd;
+    off.appendChild(off_1)
 
-    var tx_3 = document.createElement('a');
-    tx_3.appendChild(document.createTextNode(" with "));
-    list.appendChild(tx_3);
+
+    var tx_3 = document.createElement('span1');
+    tx_3.innerHTML = " with " ;
+    off_1.appendChild(tx_3);
 
 // display the prediction of price drop
     var off_2 = document.createElement('span');
-    off_2.appendChild(document.createTextNode(prediction.off_pct));
-    list.appendChild(off_2);
+    off_2.textContent = prediction.off_pct;
+    off_1.appendChild(off_2);
 
-    var tx_4 = document.createElement('a');
-    tx_4.appendChild(document.createTextNode(" listing price."));
-    list.appendChild(tx_4);
-
-
+    var tx_4 = document.createElement('span1');
+    tx_4.innerHTML  = " off listing price.";
+    off_1.appendChild(tx_4);
+    list.appendChild(off);
 
     pred_list.appendChild(list);
 
-
   })
 }
-
 
 
 document.addEventListener('DOMContentLoaded', function() {

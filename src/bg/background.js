@@ -22,8 +22,7 @@ chrome.webNavigation.onDOMContentLoaded.addListener(function (details) {
         // this part will be filled in later.
         // focus on just having for-sale houses
 
-		var req_url = api_server + "for_sale/" + url;
-
+		var req_url = api_server + "for_sale/?weblink=" + url;
 
         // sample code check return of 0/1, then proceed.
 		fetch(req_url)
@@ -36,12 +35,7 @@ chrome.webNavigation.onDOMContentLoaded.addListener(function (details) {
 					console.log("Found address");
 					chrome.browserAction.setIcon({path : "../../icons/tx.png"});
         		});
-
-
-
 			}
-
-
 		});
 	}
 });
